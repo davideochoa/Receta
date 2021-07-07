@@ -32,13 +32,13 @@ public class ExistenciaExterna {
     }
 
     @PUT
-    @Consumes(MediaType.TEXT_HTML)
+    @Produces(MediaType.TEXT_HTML)
     public String putHTML(String content) {
         return "<h1> PRUEBA PUT </h1>";
     }
     
     @DELETE
-    @Consumes(MediaType.TEXT_HTML)
+    @Produces(MediaType.TEXT_HTML)
     public String deleteHTML(String content) {
         return "<h1> PRUEBA DELETE </h1>";
     } 
