@@ -21,7 +21,7 @@ public class ExistenciaExterna {
 
     public ExistenciaExterna() {    }
     
-    final static List<RegistroExistencia> bitacora = new ArrayList<>();
+    final static List<RegistroExistencia> bitacora = new ArrayList<>(); 
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
