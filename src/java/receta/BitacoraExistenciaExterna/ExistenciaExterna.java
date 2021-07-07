@@ -38,16 +38,15 @@ public class ExistenciaExterna {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public String getHtml() {
-        //TODO return proper representation object
-        throw new UnsupportedOperationException();
+        return "<h1> PRUEBA GET </h1>";
     }
 
     /**
      * PUT method for updating or creating an instance of ExistenciaExterna
      * @param content representation for the resource
-     */
+     
     @PUT
     @Consumes(MediaType.TEXT_HTML)
     public void putHtml(String content) {
-    }
+    }*/
 }
