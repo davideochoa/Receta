@@ -1,5 +1,7 @@
 package receta.BitacoraExistenciaExterna;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -18,10 +20,13 @@ public class ExistenciaExterna {
     private UriInfo context;
 
     public ExistenciaExterna() {    }
-
+    
+    final static List<RegistroExistencia> bitacora = new ArrayList<>();
+    
     @GET
-    @Produces(MediaType.TEXT_HTML)
+    @Produces(MediaType.APPLICATION_JSON)
     public String getHTML() {
+        
         return "<h1> PRUEBA GET </h1>";
     }
     
