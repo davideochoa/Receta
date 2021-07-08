@@ -19,21 +19,27 @@ public class ExistenciaExterna {
     @Context
     private UriInfo context;
 
-    public ExistenciaExterna() {    }
+    public ExistenciaExterna(){}
     
-    final static List<RegistroExistencia> bitacora = new ArrayList<>(); 
+    static final List<RegistroExistencia> bitacora = new ArrayList<RegistroExistencia>(); 
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getHTML() {
-        
-        return "<h1> PRUEBA GET </h1>";
+    public List<RegistroExistencia> getMetodo() {
+        bitacora.add(new RegistroExistencia(1,"104",10));
+        bitacora.add(new RegistroExistencia(1,"105",20));
+        bitacora.add(new RegistroExistencia(1,"106",30));
+        return bitacora;
+        //return "<h1> PRUEBA GET </h1>";
     }
     
     @POST
-    @Produces(MediaType.TEXT_HTML)
-    public String postHTML() {
-        return "<h1> PRUEBA POST </h1>";
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<RegistroExistencia> postHTML() {
+        bitacora.add(new RegistroExistencia(1,"104",10));
+        bitacora.add(new RegistroExistencia(1,"105",20));
+        bitacora.add(new RegistroExistencia(1,"106",30));
+        return bitacora;
     }
 
     @PUT

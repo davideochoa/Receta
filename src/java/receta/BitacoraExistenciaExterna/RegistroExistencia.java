@@ -14,7 +14,12 @@ public class RegistroExistencia {
     private String clave = "";
     private int cantidad  = 0;
 
-    public RegistroExistencia() {
+    public RegistroExistencia() {}
+        
+    public RegistroExistencia(int idSurtidor, String clave, int cantidad) {
+        this.setIdSurtidor(idSurtidor);
+        this.setClave(clave);
+        this.setCantidad(cantidad);
     }
 
     public int getIdSurtidor() {
