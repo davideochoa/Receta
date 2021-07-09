@@ -24,21 +24,26 @@ public class ExistenciaExterna {
     static final List<RegistroExistencia> bitacora = new ArrayList<RegistroExistencia>(); 
     
     @GET
+    @Path("listar")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<RegistroExistencia> getMetodo() {
-        bitacora.add(new RegistroExistencia(1,"104",10));
-        bitacora.add(new RegistroExistencia(1,"105",20));
-        bitacora.add(new RegistroExistencia(1,"106",30));
+    public List<RegistroExistencia> listar() {
+        //bitacora.add(new RegistroExistencia(1,"104",10));
+        //bitacora.add(new RegistroExistencia(1,"105",20));
+        //bitacora.add(new RegistroExistencia(1,"106",30));
+        
+        if(bitacora.size() == 0)
+            bitacora.add(new RegistroExistencia(1,"106",30));
+        
         return bitacora;
         //return "<h1> PRUEBA GET </h1>";
     }
     
     @POST
+    @Path("agregar")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<RegistroExistencia> postHTML() {
-        bitacora.add(new RegistroExistencia(1,"104",10));
-        bitacora.add(new RegistroExistencia(1,"105",20));
-        bitacora.add(new RegistroExistencia(1,"106",30));
+    @Consumes(MediaType.APPLICATION_JSON)
+    public List<RegistroExistencia> agregar(RegistroExistencia re) {
+        bitacora.add(re); 
         return bitacora;
     }
 
