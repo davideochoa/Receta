@@ -12,7 +12,7 @@ import javax.ws.rs.core.Application;
  *
  * @author Usuario
  */
-@javax.ws.rs.ApplicationPath("RESTfuelAPI")
+@javax.ws.rs.ApplicationPath("RESTfulAPI")
 public class ApplicationConfig extends Application {
 
     @Override
