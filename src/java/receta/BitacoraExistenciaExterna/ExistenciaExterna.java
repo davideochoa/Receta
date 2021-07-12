@@ -9,6 +9,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 @Path("ExistenciaExterna")
@@ -44,6 +45,24 @@ public class ExistenciaExterna {
         bitacora.add(re); 
         return bitacora;
     }
+    
+    @POST
+    @Path("buscarExistencia/{clave}")
+    @Produces(MediaType.APPLICATION_JSON)
+    //@Consumes(MediaType.APPLICATION_JSON)
+    public RegistroExistencia buscarExistencia(@PathParam("clave") String clave) {
+        RegistroExistencia registro = new RegistroExistencia();
+        
+        for(RegistroExistencia re:bitacora){
+            if(re.getClave().equals(clave)){
+                registro.setClave(re.getClave());
+                registro.setCantidad(re.getCantidad());
+                registro.setIdSurtidor(re.getIdSurtidor());
+            }
+        }        
+        return registro;
+    }
+    
 /*
     @PUT
     @Produces(MediaType.TEXT_HTML)
