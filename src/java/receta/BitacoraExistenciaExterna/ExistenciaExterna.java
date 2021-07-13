@@ -47,14 +47,17 @@ public class ExistenciaExterna {
     }
     
     @POST
-    @Path("buscarExistencia/{clave}")
+    @Path("buscarExistencia/{IdSurtidor}/{clave}")
     @Produces(MediaType.APPLICATION_JSON)
     //@Consumes(MediaType.APPLICATION_JSON)
-    public RegistroExistencia buscarExistencia(@PathParam("clave") String clave) {
+    public RegistroExistencia buscarExistencia(@PathParam("IdSurtidor") int IdSurtidor,
+                                                @PathParam("clave") String clave) {
         RegistroExistencia registro = new RegistroExistencia();
         
         for(RegistroExistencia re:bitacora){
-            if(re.getClave().equals(clave)){
+            if(re.getIdSurtidor() == IdSurtidor &&
+                re.getClave().equals(clave)){
+                
                 registro.setClave(re.getClave());
                 registro.setCantidad(re.getCantidad());
                 registro.setIdSurtidor(re.getIdSurtidor());
