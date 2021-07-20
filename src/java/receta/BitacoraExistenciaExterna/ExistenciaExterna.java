@@ -51,6 +51,10 @@ public class ExistenciaExterna {
                 }
                 else
                     System.out.println("BD BAD");   
+                
+                rs.close();
+                sentencia.close();
+                con.close();
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());                
             } catch (NamingException ex) {
@@ -58,10 +62,8 @@ public class ExistenciaExterna {
             }
             
         }
-            
         
         return bitacora;
-        //return "<h1> PRUEBA GET </h1>";
     }
     
     @POST
