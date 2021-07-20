@@ -34,35 +34,28 @@ public class ExistenciaExterna {
     @Path("listarExistencias")
     @Produces(MediaType.APPLICATION_JSON)
     public List<RegistroExistencia> listarExistencias() {        
-        if(bitacora.size() == 0){
-            bitacora.add(new RegistroExistencia(1,"106",30));
+        bitacora.clear();
+        try {
+            DataSource ds = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/receta");
 
-            try {
-                DataSource ds = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/receta");
-                
-                Connection con = ds.getConnection();
-                Statement sentencia = con.createStatement();
-                ResultSet rs = sentencia.executeQuery("SELECT * FROM bitacora");
-                if(rs.next() == true){
-                    System.out.println("BD OK");   
-                    System.out.println(rs.getInt("idSurtidor"));
-                    System.out.println(rs.getString("clave"));
-                    System.out.println(rs.getInt("cantidad"));
-                }
-                else
-                    System.out.println("BD BAD");   
-                
-                rs.close();
-                sentencia.close();
-                con.close();
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());                
-            } catch (NamingException ex) {
-                Logger.getLogger(ExistenciaExterna.class.getName()).log(Level.SEVERE, null, ex);
+            Connection con = ds.getConnection();
+            Statement sentencia = con.createStatement();
+            ResultSet rs = sentencia.executeQuery("SELECT * FROM bitacora");
+            if(rs.next() == true){
+                bitacora.add(new  RegistroExistencia(rs.getInt("idSurtidor"),rs.getString("clave"),rs.getInt("cantidad")));
             }
-            
-        }
-        
+            else
+                System.out.println("BD BAD");   
+
+            rs.close();
+            sentencia.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());                
+        } catch (NamingException ex) {
+            Logger.getLogger(ExistenciaExterna.class.getName()).log(Level.SEVERE, null, ex);
+        }            
+               
         return bitacora;
     }
     
