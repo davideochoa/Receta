@@ -33,27 +33,24 @@ public class ExistenciaExterna {
     @GET
     @Path("listarExistencias")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<RegistroExistencia> listarExistencias() {        
+    public List<RegistroExistencia> listarExistencias() {      
+        Conexion conexion = new Conexion();
+        Statement sentencia = conexion.getSentencia();
+        
         bitacora.clear();
         try {
-            DataSource ds = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/receta");
-
-            Connection con = ds.getConnection();
-            Statement sentencia = con.createStatement();
+            //sentencia.executeUpdate("INSERT INTO bitacora (idSurtidor,clave,cantidad) VALUES (1,'101',10)");
+            
             ResultSet rs = sentencia.executeQuery("SELECT * FROM bitacora");
-            if(rs.next() == true){
-                bitacora.add(new  RegistroExistencia(rs.getInt("idSurtidor"),rs.getString("clave"),rs.getInt("cantidad")));
-            }
-            else
-                System.out.println("BD BAD");   
-
-            rs.close();
-            sentencia.close();
-            con.close();
+            
+            while(rs.next() == true){
+                bitacora.add(new RegistroExistencia(rs.getInt("idSurtidor"),rs.getString("clave"),rs.getInt("cantidad")));
+            }            
+            
+            conexion.close();
         } catch (SQLException ex) {
+            System.out.println();     
             System.out.println(ex.getMessage());                
-        } catch (NamingException ex) {
-            Logger.getLogger(ExistenciaExterna.class.getName()).log(Level.SEVERE, null, ex);
         }            
                
         return bitacora;
@@ -64,8 +61,22 @@ public class ExistenciaExterna {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public List<RegistroExistencia> agregarExistencia(RegistroExistencia re) {
-        bitacora.add(re); 
-        return bitacora;
+        Statement sentencia = Conexion.getSentencia();
+        
+        try {
+            sentencia.executeUpdate("INSERT INTO bitacora (idSurtidor,clave,cantidad) VALUES ("+
+                                        re.getIdSurtidor()+",'"+
+                                        re.getClave()+"',"+
+                                        re.getCantidad()+")");
+            
+        } catch (SQLException ex) {
+            System.out.println();     
+            System.out.println(ex.getMessage());     
+        }
+        
+        Conexion.close();
+        
+        return listarExistencias();
     }
     
     @POST
@@ -74,17 +85,31 @@ public class ExistenciaExterna {
     //@Consumes(MediaType.APPLICATION_JSON)
     public RegistroExistencia buscarExistencia(@PathParam("IdSurtidor") int IdSurtidor,
                                                 @PathParam("clave") String clave) {
+        
+        Statement sentencia = Conexion.getSentencia();
+        
         RegistroExistencia registro = new RegistroExistencia();
         
-        for(RegistroExistencia re:bitacora){
-            if(re.getIdSurtidor() == IdSurtidor &&
-                re.getClave().equals(clave)){
-                
-                registro.setClave(re.getClave());
-                registro.setCantidad(re.getCantidad());
-                registro.setIdSurtidor(re.getIdSurtidor());
+        try {
+            ResultSet rs = sentencia.executeQuery("SELECT cantidad FROM bitacora WHERE "+
+                                                    "IdSurtidor = "+IdSurtidor+" AND "+
+                                                    "clave = '"+clave+"'");
+            
+            if(rs.next() == true){
+                registro.setIdSurtidor(IdSurtidor);
+                registro.setClave(clave);
+                registro.setCantidad(rs.getInt("cantidad"));                
             }
-        }        
+            else
+                registro = new RegistroExistencia();
+            
+        } catch (SQLException ex) {
+            System.out.println();     
+            System.out.println(ex.getMessage()); 
+        }
+        
+        Conexion.close();
+        
         return registro;
     }
     
