@@ -14,11 +14,11 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${libs.Jersey_3.0.2_ext.classpath}</file>
+                    <file>${libs.Jersey_3.0.2_API.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${libs.Jersey_3.0.2_lib.classpath}</file>
+                    <file>${libs.Jersey_3.0.2_Lib.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>

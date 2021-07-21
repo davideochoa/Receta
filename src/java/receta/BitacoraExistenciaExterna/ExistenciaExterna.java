@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
@@ -50,6 +51,38 @@ public class ExistenciaExterna {
     }
     
     @POST
+    @Path("buscarExistencia/{IdSurtidor}/{clave}")
+    @Produces(MediaType.APPLICATION_JSON)
+    //@Consumes(MediaType.APPLICATION_JSON)
+    public RegistroExistencia buscarExistencia(@PathParam("IdSurtidor") int IdSurtidor,
+                                                @PathParam("clave") String clave) {
+        
+        Statement sentencia = Conexion.getSentencia();        
+        RegistroExistencia registro = new RegistroExistencia();
+        
+        try {
+            ResultSet rs = sentencia.executeQuery("SELECT cantidad FROM bitacora WHERE "+
+                                                    "IdSurtidor = "+IdSurtidor+" AND "+
+                                                    "clave = '"+clave+"'");
+            
+            if(rs.next() == true){
+                registro.setIdSurtidor(IdSurtidor);
+                registro.setClave(clave);
+                registro.setCantidad(rs.getInt("cantidad"));                
+            }
+            else
+                registro = new RegistroExistencia();            
+        } catch (SQLException ex) {
+            System.out.println();     
+            System.out.println(ex.getMessage()); 
+        }
+        
+        Conexion.close();
+        
+        return registro;
+    }    
+    
+    @PUT
     @Path("agregarExistencia")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -70,40 +103,6 @@ public class ExistenciaExterna {
         Conexion.close();
         
         return listarExistencias();
-    }
-    
-    @POST
-    @Path("buscarExistencia/{IdSurtidor}/{clave}")
-    @Produces(MediaType.APPLICATION_JSON)
-    //@Consumes(MediaType.APPLICATION_JSON)
-    public RegistroExistencia buscarExistencia(@PathParam("IdSurtidor") int IdSurtidor,
-                                                @PathParam("clave") String clave) {
-        
-        Statement sentencia = Conexion.getSentencia();
-        
-        RegistroExistencia registro = new RegistroExistencia();
-        
-        try {
-            ResultSet rs = sentencia.executeQuery("SELECT cantidad FROM bitacora WHERE "+
-                                                    "IdSurtidor = "+IdSurtidor+" AND "+
-                                                    "clave = '"+clave+"'");
-            
-            if(rs.next() == true){
-                registro.setIdSurtidor(IdSurtidor);
-                registro.setClave(clave);
-                registro.setCantidad(rs.getInt("cantidad"));                
-            }
-            else
-                registro = new RegistroExistencia();
-            
-        } catch (SQLException ex) {
-            System.out.println();     
-            System.out.println(ex.getMessage()); 
-        }
-        
-        Conexion.close();
-        
-        return registro;
     }
     
 /*
