@@ -1,16 +1,10 @@
 package receta.BitacoraExistenciaExterna;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -33,9 +27,8 @@ public class ExistenciaExterna {
     @GET
     @Path("listarExistencias")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<RegistroExistencia> listarExistencias() {      
-        Conexion conexion = new Conexion();
-        Statement sentencia = conexion.getSentencia();
+    public List<RegistroExistencia> listarExistencias(){        
+        Statement sentencia = Conexion.getSentencia();
         
         bitacora.clear();
         try {
@@ -47,7 +40,7 @@ public class ExistenciaExterna {
                 bitacora.add(new RegistroExistencia(rs.getInt("idSurtidor"),rs.getString("clave"),rs.getInt("cantidad")));
             }            
             
-            conexion.close();
+            Conexion.close();
         } catch (SQLException ex) {
             System.out.println();     
             System.out.println(ex.getMessage());                
