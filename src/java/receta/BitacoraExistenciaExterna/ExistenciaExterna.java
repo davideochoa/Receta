@@ -35,10 +35,15 @@ public class ExistenciaExterna {
         try {
             //sentencia.executeUpdate("INSERT INTO bitacora (idSurtidor,clave,cantidad) VALUES (1,'101',10)");
             
-            ResultSet rs = sentencia.executeQuery("SELECT * FROM bitacora");
+            ResultSet rs = sentencia.executeQuery("SELECT idSurtidor,clave,cantidad,timestamp " +
+                                                    "FROM bitacora " +
+                                                    "ORDER BY timestamp, idSurtidor,clave,cantidad");
             
             while(rs.next() == true){
-                bitacora.add(new RegistroExistencia(rs.getInt("idSurtidor"),rs.getString("clave"),rs.getInt("cantidad")));
+                bitacora.add(new RegistroExistencia(rs.getInt("idSurtidor"),
+                                                    rs.getString("clave"),
+                                                    rs.getInt("cantidad"),
+                                                    rs.getTimestamp("timestamp")));
             }            
             
             Conexion.close();

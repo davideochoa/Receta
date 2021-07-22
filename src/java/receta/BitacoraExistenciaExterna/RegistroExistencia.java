@@ -5,24 +5,43 @@
  */
 package receta.BitacoraExistenciaExterna;
 
-/**
- *
- * @author Usuario
- */
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
 public class RegistroExistencia {
     private int idSurtidor = 0;
     private String clave = "";
     private int cantidad  = 0;
-
-    public RegistroExistencia() {
-     
-    }
+    private String timestamp = "";
+    private long milisegundos = 0;
+    //timestamp - dd/MM/yyyy HH:mm:ss
+    public RegistroExistencia() {}
         
     public RegistroExistencia(int idSurtidor, String clave, int cantidad) {
         this.setIdSurtidor(idSurtidor);
         this.setClave(clave);
         this.setCantidad(cantidad);
     }
+    
+    public RegistroExistencia(int idSurtidor, String clave, int cantidad,Timestamp timestamp) {
+        this.setIdSurtidor(idSurtidor);
+        this.setClave(clave);
+        this.setCantidad(cantidad);
+        this.setTimestamp(timestamp);
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyyy HH:mm:ss");
+        milisegundos = timestamp.getTime();
+        
+        this.timestamp = format.format(timestamp);
+    }
+    
+    
 
     public int getIdSurtidor() {
         return idSurtidor;
