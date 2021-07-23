@@ -5,43 +5,41 @@
  */
 package receta.BitacoraExistenciaExterna;
 
+import jakarta.json.bind.annotation.JsonbDateFormat;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 
-public class RegistroExistencia {
+public class RegistroExistenciaSRV {
     private int idSurtidor = 0;
     private String clave = "";
     private int cantidad  = 0;
-    private String timestamp = "";
+    @JsonbDateFormat("dd/MM/yyyy") 
+    private Timestamp  timestamp = new Timestamp(1);
     private long milisegundos = 0;
     //timestamp - dd/MM/yyyy HH:mm:ss
-    public RegistroExistencia() {}
+    public RegistroExistenciaSRV() {}
         
-    public RegistroExistencia(int idSurtidor, String clave, int cantidad) {
+    public RegistroExistenciaSRV(int idSurtidor, String clave, int cantidad) {
         this.setIdSurtidor(idSurtidor);
         this.setClave(clave);
         this.setCantidad(cantidad);
     }
     
-    public RegistroExistencia(int idSurtidor, String clave, int cantidad,Timestamp timestamp) {
+    public RegistroExistenciaSRV(int idSurtidor, String clave, int cantidad,Timestamp timestamp) {
         this.setIdSurtidor(idSurtidor);
         this.setClave(clave);
         this.setCantidad(cantidad);
         this.setTimestamp(timestamp);
     }
 
-    public String getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyyy HH:mm:ss");
-        milisegundos = timestamp.getTime();
-        
-        this.timestamp = format.format(timestamp);
+    public void setTimestamp(Timestamp  timestamp) {
+        //SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyyy HH:mm:ss");
+        this.milisegundos = timestamp.getTime();        
+        this.timestamp = timestamp;
     }
-    
-    
 
     public int getIdSurtidor() {
         return idSurtidor;

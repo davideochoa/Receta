@@ -1,5 +1,6 @@
 package receta.BitacoraExistenciaExterna;
 
+import jakarta.json.bind.annotation.JsonbDateFormat;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,27 +24,27 @@ public class ExistenciaExterna {
     
     public ExistenciaExterna(){}
     
-    static final List<RegistroExistencia> bitacora = new ArrayList<RegistroExistencia>();
+    static final List<RegistroExistenciaSRV> bitacora = new ArrayList<RegistroExistenciaSRV>();
     
     @GET
     @Path("listarExistencias")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<RegistroExistencia> listarExistencias(){        
+    public List<RegistroExistenciaSRV> listarExistencias(){        
         Statement sentencia = Conexion.getSentencia();
         
         bitacora.clear();
         try {
             //sentencia.executeUpdate("INSERT INTO bitacora (idSurtidor,clave,cantidad) VALUES (1,'101',10)");
             
-            ResultSet rs = sentencia.executeQuery("SELECT idSurtidor,clave,cantidad,timestamp " +
+            ResultSet rs = sentencia.executeQuery("SELECT idSurtidor,clave,cantidad,fecha " +
                                                     "FROM bitacora " +
-                                                    "ORDER BY timestamp, idSurtidor,clave,cantidad");
+                                                    "ORDER BY fecha, idSurtidor,clave,cantidad");
             
             while(rs.next() == true){
-                bitacora.add(new RegistroExistencia(rs.getInt("idSurtidor"),
+                bitacora.add(new RegistroExistenciaSRV(rs.getInt("idSurtidor"),
                                                     rs.getString("clave"),
                                                     rs.getInt("cantidad"),
-                                                    rs.getTimestamp("timestamp")));
+                                                    rs.getTimestamp("fecha")));
             }            
             
             Conexion.close();
@@ -59,11 +60,11 @@ public class ExistenciaExterna {
     @Path("buscarExistencia/{IdSurtidor}/{clave}")
     @Produces(MediaType.APPLICATION_JSON)
     //@Consumes(MediaType.APPLICATION_JSON)
-    public RegistroExistencia buscarExistencia(@PathParam("IdSurtidor") int IdSurtidor,
+    public RegistroExistenciaSRV buscarExistencia(@PathParam("IdSurtidor") int IdSurtidor,
                                                 @PathParam("clave") String clave) {
         
         Statement sentencia = Conexion.getSentencia();        
-        RegistroExistencia registro = new RegistroExistencia();
+        RegistroExistenciaSRV registro = new RegistroExistenciaSRV();
         
         try {
             ResultSet rs = sentencia.executeQuery("SELECT cantidad FROM bitacora WHERE "+
@@ -76,7 +77,7 @@ public class ExistenciaExterna {
                 registro.setCantidad(rs.getInt("cantidad"));                
             }
             else
-                registro = new RegistroExistencia();            
+                registro = new RegistroExistenciaSRV();            
         } catch (SQLException ex) {
             System.out.println();     
             System.out.println(ex.getMessage()); 
@@ -91,7 +92,7 @@ public class ExistenciaExterna {
     @Path("agregarExistencia")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public List<RegistroExistencia> agregarExistencia(RegistroExistencia re) {
+    public List<RegistroExistenciaSRV> agregarExistencia(RegistroExistenciaSRV re) {
         Statement sentencia = Conexion.getSentencia();
         
         try {
