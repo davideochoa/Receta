@@ -1,50 +1,37 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package receta.BitacoraExistenciaExterna;
 
-import jakarta.json.bind.annotation.JsonbDateFormat;
-import java.sql.Timestamp;
+import org.joda.time.LocalDate;
 
 public class RegistroExistenciaSRV {
     private int idSurtidor = 0;
     private String clave = "";
     private int cantidad  = 0;
-    @JsonbDateFormat("dd/MM/yyyy") 
-    private Timestamp  timestamp = new Timestamp(1);
-    private long milisegundos = 0;
-    //timestamp - dd/MM/yyyy HH:mm:ss
+    private LocalDate fecha;
     public RegistroExistenciaSRV() {}
-        
     public RegistroExistenciaSRV(int idSurtidor, String clave, int cantidad) {
         this.setIdSurtidor(idSurtidor);
         this.setClave(clave);
         this.setCantidad(cantidad);
     }
-    
-    public RegistroExistenciaSRV(int idSurtidor, String clave, int cantidad,Timestamp timestamp) {
+    public RegistroExistenciaSRV(int idSurtidor, String clave, int cantidad,long time) {
         this.setIdSurtidor(idSurtidor);
         this.setClave(clave);
         this.setCantidad(cantidad);
-        this.setTimestamp(timestamp);
+        this.setFecha(new LocalDate(time));
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public LocalDate getFecha() {
+        return fecha;
     }
-
-    public void setTimestamp(Timestamp  timestamp) {
+    public void setFecha(LocalDate fecha) {
         //SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyyy HH:mm:ss");
-        this.milisegundos = timestamp.getTime();        
-        this.timestamp = timestamp;
+        //this.milisegundos = timestamp.getTime();        
+        this.fecha = fecha;
     }
 
     public int getIdSurtidor() {
         return idSurtidor;
     }
-
     public void setIdSurtidor(int idSurtidor) {
         this.idSurtidor = idSurtidor;
     }
@@ -52,7 +39,6 @@ public class RegistroExistenciaSRV {
     public String getClave() {
         return clave;
     }
-
     public void setClave(String clave) {
         this.clave = clave;
     }
@@ -60,9 +46,7 @@ public class RegistroExistenciaSRV {
     public int getCantidad() {
         return cantidad;
     }
-
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
-    }
-    
+    }    
 }

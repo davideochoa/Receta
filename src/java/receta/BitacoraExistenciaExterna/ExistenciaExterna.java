@@ -1,9 +1,11 @@
 package receta.BitacoraExistenciaExterna;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.json.bind.annotation.JsonbDateFormat;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Context;
@@ -28,31 +30,26 @@ public class ExistenciaExterna {
     
     @GET
     @Path("listarExistencias")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)    
     public List<RegistroExistenciaSRV> listarExistencias(){        
-        Statement sentencia = Conexion.getSentencia();
-        
+        Statement sentencia = Conexion.getSentencia();        
         bitacora.clear();
         try {
-            //sentencia.executeUpdate("INSERT INTO bitacora (idSurtidor,clave,cantidad) VALUES (1,'101',10)");
-            
+            //sentencia.executeUpdate("INSERT INTO bitacora (idSurtidor,clave,cantidad) VALUES (1,'101',10)");            
             ResultSet rs = sentencia.executeQuery("SELECT idSurtidor,clave,cantidad,fecha " +
                                                     "FROM bitacora " +
-                                                    "ORDER BY fecha, idSurtidor,clave,cantidad");
-            
+                                                    "ORDER BY fecha, idSurtidor,clave,cantidad");            
             while(rs.next() == true){
                 bitacora.add(new RegistroExistenciaSRV(rs.getInt("idSurtidor"),
                                                     rs.getString("clave"),
                                                     rs.getInt("cantidad"),
-                                                    rs.getTimestamp("fecha")));
-            }            
-            
+                                                    rs.getDate("fecha").getTime()));
+            }                        
             Conexion.close();
         } catch (SQLException ex) {
             System.out.println();     
             System.out.println(ex.getMessage());                
-        }            
-               
+        }                           
         return bitacora;
     }
     
