@@ -1,32 +1,33 @@
 package receta.BitacoraExistenciaExterna;
 
-import org.joda.time.LocalDate;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 public class RegistroExistenciaSRV {
     private int idSurtidor = 0;
     private String clave = "";
     private int cantidad  = 0;
-    private LocalDate fecha;
+    private String fecha;
     public RegistroExistenciaSRV() {}
     public RegistroExistenciaSRV(int idSurtidor, String clave, int cantidad) {
         this.setIdSurtidor(idSurtidor);
         this.setClave(clave);
         this.setCantidad(cantidad);
     }
-    public RegistroExistenciaSRV(int idSurtidor, String clave, int cantidad,long time) {
+    public RegistroExistenciaSRV(int idSurtidor, String clave, int cantidad,Timestamp timestamp) {
         this.setIdSurtidor(idSurtidor);
         this.setClave(clave);
         this.setCantidad(cantidad);
-        this.setFecha(new LocalDate(time));
+        this.setFecha(timestamp);
     }
 
-    public LocalDate getFecha() {
+    public String getFecha() {
         return fecha;
     }
-    public void setFecha(LocalDate fecha) {
-        //SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyyy HH:mm:ss");
-        //this.milisegundos = timestamp.getTime();        
-        this.fecha = fecha;
+    public void setFecha(Timestamp timestamp) {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyyy HH:mm:ss");
+        
+        this.fecha = format.format(timestamp);
     }
 
     public int getIdSurtidor() {
