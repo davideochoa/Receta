@@ -4,7 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -40,7 +43,7 @@ public class ExistenciaExterna {
                 bitacora.add(new RegistroExistenciaSRV(rs.getInt("idSurtidor"),
                                                     rs.getString("clave"),
                                                     rs.getInt("cantidad"),
-                                                    rs.getTimestamp("timestamp")));
+                                                    new Date(rs.getTimestamp("timestamp").getTime())));
             }                        
             Conexion.close();
         } catch (SQLException ex) {
@@ -50,7 +53,57 @@ public class ExistenciaExterna {
         return bitacora;
     }
     
-    @POST
+    @GET
+    @Path("buscarExistencia/{IdSurtidor}/{clave}")
+    @Produces(MediaType.APPLICATION_JSON)
+    //@Consumes(MediaType.APPLICATION_JSON)
+    public List<RegistroExistenciaSRV> buscarExistencia(@PathParam("IdSurtidor") int IdSurtidor,
+                                                @PathParam("clave") String clave) {
+        
+        if(clave.equals("X"))
+            clave = "";
+        
+        try {
+            Statement sentencia = Conexion.getSentencia();            
+            bitacora.clear();
+            
+            String str_sentencia = "SELECT idSurtidor,clave,cantidad,timestamp " +
+                                    "FROM bitacora ";
+            
+            if(IdSurtidor > 0 && clave.length() == 0){
+                str_sentencia += "WHERE idSurtidor = '"+IdSurtidor+"' ORDER BY timestamp,clave,cantidad";
+                
+            }
+            
+            if(IdSurtidor == 0 && clave.length() > 0){
+                str_sentencia += "WHERE clave = '"+clave+"' ORDER BY timestamp,idSurtidor,cantidad";
+            }
+            
+            if(IdSurtidor > 0 && clave.length() > 0){
+                str_sentencia += "WHERE idSurtidor = '"+IdSurtidor+"' AND clave = '"+clave+"' "+
+                        "ORDER BY timestamp, idSurtidor,clave,cantidad";
+            }
+            /*
+            ResultSet rs = sentencia.executeQuery("SELECT idSurtidor,clave,cantidad,timestamp " +
+                                                    "FROM bitacora " +
+                                                    "ORDER BY timestamp, idSurtidor,clave,cantidad");
+            */
+            System.out.println("sentencia:"+str_sentencia);
+            ResultSet rs = sentencia.executeQuery(str_sentencia);
+            while(rs.next() == true){
+                bitacora.add(new RegistroExistenciaSRV(rs.getInt("idSurtidor"),
+                        rs.getString("clave"),
+                        rs.getInt("cantidad"),
+                        new Date(rs.getTimestamp("timestamp").getTime())));
+            }
+            Conexion.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ExistenciaExterna.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return bitacora;
+    }
+    
+    /*@GET
     @Path("buscarExistencia/{IdSurtidor}/{clave}")
     @Produces(MediaType.APPLICATION_JSON)
     //@Consumes(MediaType.APPLICATION_JSON)
@@ -80,9 +133,9 @@ public class ExistenciaExterna {
         Conexion.close();
         
         return registro;
-    }    
+    } */   
     
-    @PUT
+    @POST
     @Path("agregarExistencia")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

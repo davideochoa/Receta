@@ -1,36 +1,32 @@
 package receta.BitacoraExistenciaExterna;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import testreceta.TimestampAdapter;
+import java.util.Date;
 
 public class RegistroExistenciaSRV {
     private int idSurtidor = 0;
     private String clave = "";
     private int cantidad  = 0;
-    private Timestamp fecha;
+    private Date timestamp;
     public RegistroExistenciaSRV() {}
     public RegistroExistenciaSRV(int idSurtidor, String clave, int cantidad) {
         this.setIdSurtidor(idSurtidor);
         this.setClave(clave);
         this.setCantidad(cantidad);
     }
-    public RegistroExistenciaSRV(int idSurtidor, String clave, int cantidad,Timestamp timestamp) {
+    public RegistroExistenciaSRV(int idSurtidor, String clave, int cantidad,Date timestamp) {
         this.setIdSurtidor(idSurtidor);
         this.setClave(clave);
         this.setCantidad(cantidad);
         this.setFecha(timestamp);
     }
-    @XmlJavaTypeAdapter(value = TimestampAdapter.class, type = Timestamp.class)
-    public Timestamp getFecha() {
-        return fecha;
+    
+    public Date getFecha() {
+        return timestamp;
     }
-    public void setFecha(Timestamp timestamp) {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyyy HH:mm:ss");
+    public void setFecha(Date timestamp) {
+        //SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyyy HH:mm:ss");
         
-        this.fecha = timestamp;
+        this.timestamp = timestamp;
     }
 
     public int getIdSurtidor() {
