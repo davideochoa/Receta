@@ -1,11 +1,8 @@
 package receta.BitacoraExistenciaExterna;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import jakarta.json.bind.annotation.JsonbDateFormat;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Context;
